@@ -3,11 +3,11 @@ import os
 import sys
 import time
 import subprocess
-import getopt
+#import getopt
 
 BaseDir = os.environ['HOME']+"/.remindme"
 DATADIR = os.environ['HOME']+"/Dropbox/Apps/My Notes in Gear/MyNotes"
-CONFFILE = BaseDir+"/config.ini"
+#CONFFILE = BaseDir+"/config.ini"
 
 # Utility funcs
 # #########################################################
@@ -20,11 +20,10 @@ def notif_msg(msg):
 ###########################################################
 
 
-def usage():
-    print "Usage \n"
+#def usage():
+#    print "Usage \n"
 
-
-try:
+'''try:
     opts, args = getopt.getopt(sys.argv[1:], 'hs', ['help', 'setup'])
 except getopt.GetoptError:
     usage()
@@ -42,18 +41,11 @@ for opt, arg in opts:
         f.close()
         sys.exit(0)
 
-try:
-    DATADIR = subprocess.check_output("grep datafile "+CONFFILE+" | cut -d= -f 2", shell=True)
-    DATADIR = DATADIR.rstrip('\n')
-except:
-    print "No directory for reminders specified! Quiting..."
-    sys.exit(2)
-
 debug = 0
 if not os.path.exists(DATADIR):
     print "Directory "+DATADIR+" does not exists."
     sys.exit(2)
-
+'''
 ###########################################
 
 
