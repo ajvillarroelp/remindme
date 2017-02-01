@@ -1,13 +1,13 @@
 #!/usr/bin/python
 import os
-import sys
 import time
+import sys
 import subprocess
-#import getopt
+from gi.repository import Notify
 
+APP = "RemindME"
 BaseDir = os.environ['HOME']+"/.remindme"
-DATADIR = os.environ['HOME']+"/Dropbox/Apps/My Notes in Gear/MyNotes"
-#CONFFILE = BaseDir+"/config.ini"
+CONFFILE = BaseDir + "/config.ini"
 
 # Utility funcs
 # #########################################################
@@ -15,8 +15,11 @@ DATADIR = os.environ['HOME']+"/Dropbox/Apps/My Notes in Gear/MyNotes"
 
 def notif_msg(msg):
     global BaseDir
-    icon = BaseDir+"/remindme.png"
-    os.system("notify-send -i "+icon+" RemindME \""+msg+"\"")
+    global APP
+    icon = "remindme.png"
+    n = Notify.Notification.new(APP, msg, icon)
+    n.show()
+
 ###########################################################
 
 
@@ -47,7 +50,52 @@ if not os.path.exists(DATADIR):
     sys.exit(2)
 '''
 ###########################################
+total = len(sys.argv)
+# print "AA ",total
+# sys.exit(2)
+try:
+    DATADIR = subprocess.check_output("grep datadir "+CONFFILE+" | cut -d= -f 2", shell=True)
+    DATADIR = DATADIR.rstrip('\n')
+except:
+    print "No config file specified!\n Run: python remindme.py setupdir"
+    # DATADIR = os.environ['HOME']+"/Dropbox/Apps/My Notes in Gear/MyNotes"
+    sys.exit(2)
+if (DATADIR == "" or not os.path.isdir(DATADIR)) and total == 0:
+    print "Notes Directory does not exists!\nRun python remindme.py setupdir"
+    sys.exit(2)
 
+try:
+    SLEEPINTERVAL = subprocess.check_output("grep interval "+CONFFILE+" | cut -d= -f 2", shell=True)
+except:
+    SLEEPINTERVAL = 2*3600
+
+if total > 1:
+    if sys.argv[1] == "setupdir":
+        print "Setup...\n"
+        try:
+            DATADIR = subprocess.check_output("zenity --title \"Select Reminders directory\" --file-selection --directory",shell=True)
+            print "AA "+DATADIR
+        except:
+            print ""
+        if DATADIR != "":
+            f = open(CONFFILE, "w")
+            f.write("datadir="+DATADIR+"\n")
+            f.write("interval="+str(SLEEPINTERVAL)+"\n")
+            f.close()
+        else:
+            print "Selection is empty...\nRun python remindme.py setupdir"
+            sys.exit(2)
+
+    elif sys.argv[1] == "setupinterval":
+        SLEEPINTERVAL = subprocess.check_output("zenity --title \"Remind Interval in seconds\" --entry  --text  \"Remind Interval (s)\"")
+        if SLEEPINTERVAL != "":
+            f = open(CONFFILE, "w")
+            f.write("datadir="+DATADIR+"\n")
+            f.write("interval="+SLEEPINTERVAL+"\n")
+            f.close()
+        sys.exit(0)
+
+Notify.init(APP)
 
 while (True):
     remindlist = list()
@@ -63,4 +111,4 @@ while (True):
         notif_msg(item.rstrip('\n'))
         time.sleep(7)
     # sys.exit(0)
-    time.sleep(2*3600)
+    time.sleep(int(SLEEPINTERVAL))
