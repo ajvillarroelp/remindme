@@ -69,6 +69,8 @@ if total > 1:
         else:
             print "Selection is empty...\nRun python remindme.py setup"
             sys.exit(2)
+        if not os.path.exists(BaseDir):
+            os.makedirs(BaseDir)
         os.system("cp listreminders.sh "+BaseDir)
         os.system("cp "+BaseDir+"/remindme.png ~/.icons")
 
