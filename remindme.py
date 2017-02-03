@@ -56,6 +56,8 @@ total = len(sys.argv)
 if total > 1:
     if sys.argv[1] == "setup":
         print "Setup...\n"
+        if not os.path.exists(BaseDir):
+            os.makedirs(BaseDir)
         try:
             DATADIR = subprocess.check_output("zenity --title \"Select Reminders directory\" --file-selection --directory", shell=True)
             print "AA "+DATADIR
@@ -69,10 +71,8 @@ if total > 1:
         else:
             print "Selection is empty...\nRun python remindme.py setup"
             sys.exit(2)
-        if not os.path.exists(BaseDir):
-            os.makedirs(BaseDir)
         os.system("cp listreminders.sh "+BaseDir)
-        os.system("cp "+BaseDir+"/remindme.png ~/.icons")
+        os.system("cp remindme.png ~/.icons")
 
 # Read config parameters
 try:
