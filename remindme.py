@@ -73,7 +73,7 @@ if total > 1:
     if sys.argv[1] == "setupdir":
         print "Setup...\n"
         try:
-            DATADIR = subprocess.check_output("zenity --title \"Select Reminders directory\" --file-selection --directory",shell=True)
+            DATADIR = subprocess.check_output("zenity --title \"Select Reminders directory\" --file-selection --directory", shell=True)
             print "AA "+DATADIR
         except:
             print ""
@@ -96,6 +96,8 @@ if total > 1:
         sys.exit(0)
 
 Notify.init(APP)
+
+os.system("cp "+BaseDir+"/remindme.png ~/.icons")
 
 while (True):
     remindlist = list()
