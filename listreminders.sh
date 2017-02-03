@@ -1,5 +1,6 @@
 #!/bin/bash
-DATADIR="/home/antonio/Dropbox/Apps/My Notes in Gear/MyNotes"
+#DATADIR="/home/antonio/Dropbox/Apps/My Notes in Gear/MyNotes"
+DATADIR=$(cat ~/.remindme/config.ini | grep datadir | cut -d= -f 2)
 cd "$DATADIR"
 msg=""
 for i in *;do

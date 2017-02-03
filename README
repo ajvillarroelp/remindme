@@ -1,0 +1,2 @@
+Utility to show time reminders from app MyNotesGear for Samsung Gear smartwatches, on Ubuntu based distros.
+To setup reminders directory (App must enable Dropbox sync) run python remindme.py setupdir
